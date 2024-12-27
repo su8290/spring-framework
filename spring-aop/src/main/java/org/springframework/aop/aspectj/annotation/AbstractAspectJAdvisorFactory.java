@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2021 the original author or authors.
+ * Copyright 2002-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import org.springframework.lang.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -53,8 +52,6 @@ import java.util.StringTokenizer;
  * @since 2.0
  */
 public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFactory {
-
-	private static final String AJC_MAGIC = "ajc$";
 
 	/**
 	 * 敏感注解类
@@ -82,27 +79,7 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 	 */
 	@Override
 	public boolean isAspect(Class<?> clazz) {
-		return (hasAspectAnnotation(clazz) && !compiledByAjc(clazz));
-	}
-
-	private boolean hasAspectAnnotation(Class<?> clazz) {
 		return (AnnotationUtils.findAnnotation(clazz, Aspect.class) != null);
-	}
-
-	/**
-	 * We need to detect this as "code-style" AspectJ aspects should not be
-	 * interpreted by Spring AOP.
-	 */
-	private boolean compiledByAjc(Class<?> clazz) {
-		// The AJTypeSystem goes to great lengths to provide a uniform appearance between code-style and
-		// annotation-style aspects. Therefore there is no 'clean' way to tell them apart. Here we rely on
-		// an implementation detail of the AspectJ compiler.
-		for (Field field : clazz.getDeclaredFields()) {
-			if (field.getName().startsWith(AJC_MAGIC)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override
@@ -128,6 +105,7 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 					"This is not supported in Spring AOP.");
 		}
 	}
+
 
 	/**
 	 * Find and return the first AspectJ annotation on the given method
@@ -178,14 +156,14 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 
 
 	/**
-	 * Class modelling an AspectJ annotation, exposing its type enumeration and
+	 * Class modeling an AspectJ annotation, exposing its type enumeration and
 	 * pointcut String.
 	 *
 	 * @param <A> the annotation type
 	 */
 	protected static class AspectJAnnotation<A extends Annotation> {
 
-		private static final String[] EXPRESSION_ATTRIBUTES = new String[]{"pointcut", "value"};
+		private static final String[] EXPRESSION_ATTRIBUTES = new String[] {"pointcut", "value"};
 
 		private static Map<Class<?>, AspectJAnnotationType> annotationTypeMap = new HashMap<>(8);
 

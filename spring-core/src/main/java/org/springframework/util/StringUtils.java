@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2023 the original author or authors.
+ * Copyright 2002-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -806,6 +806,7 @@ public abstract class StringUtils {
 	 * and {@code "0"} through {@code "9"} stay the same.</li>
 	 * <li>Special characters {@code "-"}, {@code "_"}, {@code "."}, and {@code "*"} stay the same.</li>
 	 * <li>A sequence "{@code %<i>xy</i>}" is interpreted as a hexadecimal representation of the character.</li>
+	 * <li>For all other characters (including those already decoded), the output is undefined.</li>
 	 * </ul>
 	 *
 	 * @param source  the encoded String
@@ -854,7 +855,7 @@ public abstract class StringUtils {
 	 * specified by {@link Locale#forLanguageTag}.
 	 *
 	 * @param localeValue the locale value: following either {@code Locale's}
-	 *                    {@code toString()} format ("en", "en_UK", etc), also accepting spaces as
+	 *                    {@code toString()} format ("en", "en_UK", etc.), also accepting spaces as
 	 *                    separators (as an alternative to underscores), or BCP 47 (e.g. "en-UK")
 	 * @return a corresponding {@code Locale} instance, or {@code null} if none
 	 * @throws IllegalArgumentException in case of an invalid locale specification
@@ -885,7 +886,7 @@ public abstract class StringUtils {
 	 * Please use {@link #parseLocale} for lenient parsing of both formats.</b>
 	 *
 	 * @param localeString the locale {@code String}: following {@code Locale's}
-	 *                     {@code toString()} format ("en", "en_UK", etc), also accepting spaces as
+	 *                     {@code toString()} format ("en", "en_UK", etc.), also accepting spaces as
 	 *                     separators (as an alternative to underscores)
 	 * @return a corresponding {@code Locale} instance, or {@code null} if none
 	 * @throws IllegalArgumentException in case of an invalid locale specification
